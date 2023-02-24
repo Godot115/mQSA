@@ -62,11 +62,14 @@ if __name__ == "__main__":
         "pop_size": 100,
     }
     models = []
+    models.append(DE.JADE(**paras))
     models.append(DE.SADE(**paras))
+    models.append(PSO.HPSO_TVAC(**paras))
     models.append(GA.BaseGA(**paras))
     models.append(QSA.mQSA(**paras))
+    models.append(QSA.mulQSA(**paras))
 
-    for times in range(5):
+    for times in range(10):
         seed = random.randint(0, 100000)
         # seed = 881
         # seed = 401
@@ -76,13 +79,13 @@ if __name__ == "__main__":
         # seed = 32133
         np.random.seed(seed)
         random.seed(seed)
-        thetas = {"t1": [0.432, 0.217, 0.654, 0.879, 0.157, 0.553, 0.366],
-                  "t2": [0.956, 0.725, 0.293, 0.522, 0.144, 0.677, 0.934],
-                  "t3": [0.018, 0.953, 0.755, 0.409, 0.083, 0.632, 0.289]}
+        thetas = {"t1": [-2.75, 5.61, 7.82, -9.24, 0.42, 1.91, -3.55],
+                  "t2": [6.79, -3.32, 9.09, 5.89, -2.97, -5.06, -3.74],
+                  "t3": [-7.93, -9.06, 1.09, -0.56, 2.37, 8.45, -1.25]}
         for theta in thetas:
             print(theta)
             model = LogisticModel(thetas[theta])
-            problem_doe = DoeProblem(model, "D-optimal", grid_size=1001, lob=[0], hib=[1], minmax="max", dimension=6,
+            problem_doe = DoeProblem(model, "D-optimal", grid_size=1001, lob=[-1], hib=[1], minmax="max", dimension=6,
                                      num_of_sup=8, log_to=None)
             # model = CustomModel("1/(1+e**(-1*(t_0+t_1 *x_1+t_2*x_2+t_3*x_3 + t_4*x_4 + t_5*x_5 + t_6*x_6)))",
             #                     ["x_1", "x_2", "x_3", "x_4", "x_5", "x_6"],

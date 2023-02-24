@@ -526,3 +526,63 @@ class QSA(BAS_QSA):
         pop = self.update_business_1__(self.pop, epoch)
         pop = self.update_business_2__(pop)
         self.pop = self.update_business_3__(pop, self.g_best)
+
+class mulQSA(mQSA):
+
+    def update_business_2__(self, pop=None):
+        A1, A2, A3 = pop[0][self.ID_POS], pop[1][self.ID_POS], pop[2][self.ID_POS]
+        t1, t2, t3 = pop[0][self.ID_TAR][self.ID_FIT], pop[1][self.ID_TAR][self.ID_FIT], pop[2][self.ID_TAR][
+            self.ID_FIT]
+        q1, q2, q3 = self.calculate_queue_length__(t1, t2, t3)
+        pr = [i / self.pop_size for i in range(1, self.pop_size + 1)]
+        if t1 > 1.0e-005:
+            cv = t1 / (t2 + t3)
+        else:
+            cv = 1.0 / 2
+        pop_new = []
+        for i in range(self.pop_size):
+            if i < q1:
+                A = deepcopy(A1)
+            elif q1 <= i < q1 + q2:
+                A = deepcopy(A2)
+            else:
+                A = deepcopy(A3)
+            if np.random.random() < pr[i]:
+                i1, i2 = np.random.choice(self.pop_size, 2, replace=False)
+                if np.random.random() < cv:
+                    X_new = pop[i][self.ID_POS] + np.random.exponential(0.5) * (
+                                pop[i1][self.ID_POS] - pop[i2][self.ID_POS])
+                else:
+                    X_new = pop[i][self.ID_POS] + np.random.exponential(0.5) * (A - pop[i1][self.ID_POS])
+            else:
+                X_new = self.generate_position(self.problem.lb, self.problem.ub)
+            pos_new = self.amend_position(X_new, self.problem.lb, self.problem.ub)
+            pop_new.append([pos_new, None])
+            if self.mode not in self.AVAILABLE_MODES:
+                target = self.get_target_wrapper(pos_new)
+                pop_new[-1] = self.get_better_solution([pos_new, target], pop[i])
+        if self.mode in self.AVAILABLE_MODES:
+            pop_new = self.update_target_wrapper_population(pop_new)
+            pop_new = self.greedy_selection_population(pop, pop_new)
+        return self.get_sorted_strim_population(pop_new, self.pop_size)
+    def update_business_3__(self, pop, g_best):
+        pr = [i / self.pop_size for i in range(1, self.pop_size + 1)]
+        pop_new = []
+        for i in range(self.pop_size):
+            pos_new = deepcopy(pop[i][self.ID_POS])
+            for j in range(self.problem.n_dims):
+                if np.random.random() > pr[i]:
+                    i1, i2 = np.random.choice(self.pop_size, 2, replace=False)
+                    e = np.random.exponential(0.5)
+                    X1 = pop[i1][self.ID_POS]
+                    X2 = pop[i2][self.ID_POS]
+                    pos_new[j] = X1[j] + e * (X2[j] - pop[i][self.ID_POS][j])
+            pos_new = self.amend_position(pos_new, self.problem.lb, self.problem.ub)
+            pop_new.append([pos_new, None])
+            if self.mode not in self.AVAILABLE_MODES:
+                target = self.get_target_wrapper(pos_new)
+                pop_new[-1] = self.get_better_solution([pos_new, target], pop[i])
+        if self.mode in self.AVAILABLE_MODES:
+            pop_new = self.update_target_wrapper_population(pop_new)
+            pop_new = self.greedy_selection_population(pop, pop_new)
+        return pop_new
