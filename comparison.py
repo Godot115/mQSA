@@ -40,18 +40,21 @@ def create_starting_positions(problem, pop_size=None):
     starting_positions = np.append(pos, weights, axis=1)
     return starting_positions
 
+
 import csv
+
 with open("log.csv", "a+") as csvfile:
     writer = csv.writer(csvfile)
-    writer.writerow(["algorithm", "theta", "best_fitness","best_history"])
+    writer.writerow(["algorithm", "theta", "best_fitness", "best_history"])
 
-def write_log(algorithm, theta, best_fitness, best_history):
+
+def write_log(algorithm, theta, seed, best_fitness, best_history):
     with open("log.csv", "a+") as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow([algorithm, theta, best_fitness, best_history])
+        writer.writerow([algorithm, theta, seed, best_fitness, best_history])
+
+
 if __name__ == "__main__":
-
-
 
     paras = {
         "epoch": 5000,
@@ -96,6 +99,5 @@ if __name__ == "__main__":
                 best = [best_fit]
                 for epoch_best in model.history.list_global_best:
                     best.append(epoch_best[1][0])
-                write_log(model.get_name(), theta, best_fitness, best)
-                print(time.time(),model.get_name())
-
+                write_log(model.get_name(), theta, seed, best_fitness, best)
+                print(time.time(), model.get_name())
