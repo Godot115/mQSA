@@ -6,22 +6,12 @@
 # @Software: PyCharm
 import heapq
 import itertools
-import math
 import random
 import sys
 from random import shuffle
-import time
 from collections import defaultdict
 import matplotlib.pyplot as plt
 import numpy as np
-import itertools as it
-from sklearn.cluster import *
-from models.custom_model import CustomModel
-from models.model2 import Model2
-from models.model3_negative import Model3Negative
-from models.model3_positive import Model3Positive
-from models.model4 import Model4
-from models.model5 import Model5
 from models.model_util import ModelUtil
 
 
@@ -156,6 +146,7 @@ class AlgorithmUtil():
         self.design_points = [(point, weights[point]) for point in design_points]
         self.criterion_val = model_util.get_criterion_val()
         self.eff = gradient_target() / max_gradient
+        print(self.criterion_val)
 
     def rex(self):
         candidate_set = self.candidate_set
@@ -541,8 +532,7 @@ class AlgorithmUtil():
         self.design_points = [(point, weights[point]) for point in design_points]
         self.eff = cur_eff
 
-    def multiplicative_process(self):
-        pass
+
 
     def proposed(self):
         model_util = self.model_util

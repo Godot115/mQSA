@@ -21,8 +21,6 @@ class ModelUtil():
         self.hb = hib
         self.levels = []
         self.grid_size = grid_size
-        self.initial_set = []
-        self.spare_grid_size = math.ceil(1000 ** (1 / len(lob)))
         self.generate_candidate_set()
         self.criterion = criterion
         if criterion == "D-optimal":
@@ -40,13 +38,9 @@ class ModelUtil():
         lb = self.lb
         hb = self.hb
         grid_size = self.grid_size
-        spare_grid_size = self.spare_grid_size
-        spare_levels = []
         for idx in range(len(lb)):
             self.levels.append(np.linspace(lb[idx], hb[idx], grid_size))
-            spare_levels.append(np.linspace(lb[idx], hb[idx], spare_grid_size))
         self.candidate_set = [point for point in itertools.product(*self.levels)]
-        self.initial_set = [point for point in itertools.product(*spare_levels)]
 
     def generate_star_set(self, x):
         levels = self.levels
@@ -55,7 +49,10 @@ class ModelUtil():
             line = levels[factor]
             for i in range(len(line)):
                 result.add(tuple(x[:factor] + (line[i],) + x[factor + 1:]))
-        result.remove(x)
+        # print(result)
+        result = list(result)
+        if tuple(x) in result:
+            result.remove(tuple(x))
         return result
 
     def get_inf_mat(self):
