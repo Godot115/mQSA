@@ -102,6 +102,7 @@ line_dict = {
 means = pd.read_csv("poisson_means_theta_algorithm.csv")
 import matplotlib.pyplot as plt
 
+plt.rc('font', family='Times New Roman ')
 plt.figure(dpi=300)
 # set colors as gist_gray
 ax = plt.gca()  # gca:get current axis得到当前轴
@@ -119,5 +120,5 @@ for i, theta in enumerate(means.theta.unique()):
     plt.xlabel('Iteration')
     plt.ylabel('log-determinant of Fisher Information Matrix')
     plt.legend(fontsize=10)
-    plt.savefig(f"mean_fitness_vs_algorithm_theta_{i + 1}_poisson.png")
+    plt.savefig(f"mean_fitness_vs_algorithm_theta_{i + 1}_poisson.png", dpi=600, bbox_inches='tight')
     plt.cla()

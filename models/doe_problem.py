@@ -54,7 +54,6 @@ class DoeProblem(Problem):
             self.inf_mat += self.model.par_deriv_vec(points[i]) * \
                             self.model.par_deriv_vec(points[i]).T * weights[i]
         return np.linalg.det(self.inf_mat) * (1 - abs(1 - weights_sum))
-        # return np.linalg.det(self.inf_mat)
 
     def mul_process(self, solution):
         model_util = self.model_util
