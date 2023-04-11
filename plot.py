@@ -74,11 +74,11 @@ import pandas as pd
 # plt.savefig("mean_fitness_vs_algorithm.png")
 
 algorithm_dict = {
-    "mulQSA": "proposed algorithm",
+    "mulQSA": "Proposed Algorithm",
     "SADE": "SaDE",
     "BaseDE": "DE",
     "BaseGA": "GA",
-    "OriginalQSA": "QSO",
+    "OriginalQSA": "QSA",
     "OriginalPSO": "PSO"
 }
 marker_dict = {
@@ -103,12 +103,14 @@ means = pd.read_csv("poisson_means_theta_algorithm.csv")
 import matplotlib.pyplot as plt
 
 plt.rc('font', family='Times New Roman ')
-plt.figure(dpi=300)
+# plt.figure(dpi=300)
 # set colors as gist_gray
 ax = plt.gca()  # gca:get current axis得到当前轴
+
 # 设置图片的右边框和上边框为不显示
 ax.spines['right'].set_color('none')
 ax.spines['top'].set_color('none')
+plt.figure(figsize=(8, 4.8))
 for i, theta in enumerate(means.theta.unique()):
     for algorithm in means.algorithm.unique():
         mean = means[(means.theta == theta) & (means.algorithm == algorithm)]
@@ -117,8 +119,9 @@ for i, theta in enumerate(means.theta.unique()):
         mean = mean.values.tolist()[0]
         plt.plot(mean, label=algorithm_dict[algorithm], marker=marker_dict[algorithm], markevery=40, markersize=3,
                  linestyle=line_dict[algorithm])
-    plt.xlabel('Iteration')
-    plt.ylabel('log-determinant of Fisher Information Matrix')
-    plt.legend(fontsize=10)
-    plt.savefig(f"mean_fitness_vs_algorithm_theta_{i + 1}_poisson.png", dpi=600, bbox_inches='tight')
+    plt.xlabel('Iteration', fontsize=12)
+    plt.ylabel('log-determinant of Fisher Information Matrix', fontsize=12)
+    plt.legend(fontsize=12)
+    plt.savefig(f"mean_fitness_vs_algorithm_theta_{i + 1}_poisson.png", dpi=800, bbox_inches='tight')
+    # plt.show()
     plt.cla()

@@ -52,7 +52,7 @@ if __name__ == "__main__":
         best_fit = -1
         with open("adsorption_test.txt", "a") as file:
             file.write(algorithm.get_name() + "\t")
-        for times in range(60):
+        for times in range(100):
             # try:
             seed = random.randint(0, 100000)
             np.random.seed(seed)

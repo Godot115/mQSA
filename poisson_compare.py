@@ -41,13 +41,13 @@ def create_starting_positions(problem, pop_size=None):
 
 import csv
 
-with open("poisson_log.csv", "a+") as csvfile:
+with open("poisson_log_9.csv", "a+") as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(["algorithm", "theta", "seed", "best_fitness"] + ["best_history_" + str(i) for i in range(2000)])
 
 
 def write_log(algorithm, theta, seed, best_fitness, best_history):
-    with open("poisson_log.csv", "a+") as csvfile:
+    with open("poisson_log_9.csv", "a+") as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow([algorithm, theta, seed, best_fitness] + best_history)
 
@@ -55,8 +55,8 @@ def write_log(algorithm, theta, seed, best_fitness, best_history):
 if __name__ == "__main__":
 
     paras = {
-        "epoch": 20,
-        "pop_size": 50,
+        "epoch": 2000,
+        "pop_size": 500,
     }
     models = []
     models.append(QSA.mulQSA(**paras))
@@ -81,7 +81,7 @@ if __name__ == "__main__":
                 problem_doe = DoeProblem(model, "D-optimal", grid_size=11, lob=[-1, -1, -1], hib=[1, 1, 1],
                                          minmax="max",
                                          dimension=3,
-                                         num_of_sup=10, log_to=None)
+                                         num_of_sup=9, log_to=None)
 
                 starting_positions = create_starting_positions(problem_doe, paras["pop_size"])
                 best_fit = float('-inf')

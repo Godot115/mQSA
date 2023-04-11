@@ -34,13 +34,13 @@ def create_starting_positions(problem, pop_size=None):
 
 import csv
 
-with open("logistic_log.csv", "a+") as csvfile:
+with open("logistic_log_11.csv", "a+") as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(["algorithm", "theta", "seed", "best_fitness"] + ["best_history_" + str(i) for i in range(2000)])
 
 
 def write_log(algorithm, theta, seed, best_fitness, best_history):
-    with open("logistic_log.csv", "a+") as csvfile:
+    with open("logistic_log_11.csv", "a+") as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow([algorithm, theta, seed, best_fitness] + best_history)
 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
                 model = LogisticModel(thetas[theta])
                 problem_doe = DoeProblem(model, "D-optimal", grid_size=11, lob=[-1] * 5, hib=[1] * 5, minmax="max",
                                          dimension=5,
-                                         num_of_sup=10, log_to=None)
+                                         num_of_sup=11, log_to='console')
 
                 starting_positions = create_starting_positions(problem_doe, paras["pop_size"])
                 best_fit = float('-inf')
